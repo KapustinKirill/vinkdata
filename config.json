@@ -1,0 +1,242 @@
+{
+  "SKUProcessing": {
+    "table_name": "project_schema.Ску",
+    "conflict_target":"Ид",
+    "path": "КорневойРаздел.СписокСку.Ску",
+    "fields": [
+      {"source": "Ид", "dest": "Ид", "data_type": "text"},
+      {"source": "ИдТовара", "dest": "ИдТовара", "data_type": "text"},
+      {"source": "Артикул", "dest": "Артикул", "data_type": "text"},
+      {"source": "Наименование", "dest": "Наименование", "data_type": "text"},
+      {"source": "ПризнакДляОтбора", "dest": "ПризнакДляОтбора", "data_type": "text"},
+      {"source": "КодБазовойЕдиницыИзмерения", "dest": "КодБазовойЕдиницыИзмерения",  "data_type": "integer"},
+      {"source": "ВесНеттоБазовойЕдИзм", "dest": "ВесНеттоБазовойЕдИзм",  "data_type": "numeric"},
+      {"source": "ДлинаБазовойЕдИзм", "dest": "ДлинаБазовойЕдИзм",  "data_type": "numeric"},
+      {"source": "ШиринаБазовойЕдИзм", "dest": "ШиринаБазовойЕдИзм",  "data_type": "numeric"},
+      {"source": "ВысотаБазовойЕдИзм", "dest": "ВысотаБазовойЕдИзм",  "data_type": "numeric"},
+      {"source": "СрокПроцессирования", "dest": "СрокПроцессирования",  "data_type": "integer"},
+      {"source": "КратностьЗаказа", "dest": "КратностьЗаказа",  "data_type": "numeric"},
+      {"source": "КодЕдиницыИзмеренияКратности", "dest": "КодЕдиницыИзмеренияКратности",  "data_type": "integer"},
+      {"source": "ПометкаУдаления", "dest": "ПометкаУдаления",  "data_type": "boolean"},
+      {"source": "НаценкаЗаПродажуВНарезкуПроцент", "dest": "НаценкаЗаПродажуВНарезкуПроцент",  "data_type": "numeric"}
+
+    ],
+    "computed_fields": [
+      {"name": "full_name", "compute": "name + ' (' + article + ')'"}
+    ]
+  },
+
+  "SKUPropertiesProcessing": {
+    "table_name": "project_schema.СвойстваСку",
+    "conflict_target":"",
+    "path": "КорневойРаздел.ТипыСвойств.Одиночные.Свойство",
+    "fields": [
+      {"source": "Ид", "dest": "Ид", "data_type": "text"},
+      {"source": "Наименование", "dest": "Наименование", "data_type": "text"},
+      {"source": "ПометкаУдаления", "dest": "ПометкаУдаления", "data_type": "boolean"},
+      {"source": "ХранитьЗначенияВСправочнике", "dest": "ХранитьЗначенияВСправочнике", "data_type": "boolean"}
+
+    ],
+    "computed_fields": []
+  },
+
+
+  "SKUUnitsProcessing": {
+    "table_name": "project_schema.ЕдиницыИзмерения",
+    "conflict_target":"Код",
+    "path": "КорневойРаздел.ЕдиницыИзмерения.ЕдИзмерения",
+    "fields": [
+      {"source": "Код", "dest": "Код", "data_type": "integer"},
+      {"source": "Наименование", "dest": "Наименование", "data_type": "text"}
+
+    ],
+    "computed_fields": []
+
+  },
+
+    "SKUProductsProcessing": {
+    "table_name": "project_schema.Товары",
+    "conflict_target":"Ид",
+    "path": "КорневойРаздел.СписокТоваров.Товар",
+    "fields": [
+      {"source": "Ид", "dest": "Ид", "data_type": "text"},
+      {"source": "Наименование", "dest": "Наименование", "data_type": "text"}
+
+    ],
+    "computed_fields": []
+
+  },
+
+  "SKUSectionsProcessing": {
+    "table_name": "project_schema.РазделыSKU",
+    "conflict_target":"",
+    "parent": "Ид",
+    "parent_id": "ИдСку",
+    "parent_path": "КорневойРаздел.СписокСку.Ску",
+    "path": "Разделы",
+    "fields": [
+      {"source": "ИдРаздела", "dest": "ИдРаздела", "data_type": "text"},
+      {"source": "ИдСку", "dest": "ИдСку", "data_type": "text"}
+
+    ],
+    "computed_fields": []
+
+  },
+
+    "SKUSolutionsProcessing": {
+    "table_name": "project_schema.РешенияSKU",
+    "conflict_target":"",
+    "parent": "Ид",
+    "parent_id": "ИдСку",
+    "parent_path": "КорневойРаздел.СписокСку.Ску",
+    "path": "СписокРешений",
+    "fields": [
+      {"source": "ИдРешения", "dest": "ИдРешения", "data_type": "list"},
+      {"source": "ИдСку", "dest": "ИдСку", "data_type": "text"}
+
+    ],
+    "computed_fields": []
+
+  },
+   "SKUSimilarProcessing": {
+    "table_name": "project_schema.ПохожиеСку",
+    "conflict_target":"",
+    "parent": "Ид",
+    "parent_id": "ИдСку",
+    "parent_path": "КорневойРаздел.СписокСку.Ску",
+    "path": "ПохожиеСку",
+    "fields": [
+      {"source": "ТоварИд", "dest": "ТоварИд", "data_type": "list"},
+      {"source": "ИдСку", "dest": "ИдСку", "data_type": "uuid"}
+
+    ],
+    "computed_fields": []
+
+  },
+
+    "SKULabelsProcessing": {
+    "table_name": "project_schema.ЛейблыСку",
+    "conflict_target":"",
+    "parent": "Ид",
+    "parent_id": "ИдСку",
+    "parent_path": "КорневойРаздел.СписокСку.Ску",
+    "path": "СписокЛейблов",
+    "fields": [
+      {"source": "ИдЛейбла", "dest": "ИдЛейбла", "data_type": "list"},
+      {"source": "ИдСку", "dest": "ИдСку", "data_type": "uuid"}
+
+    ],
+    "computed_fields": []
+
+  },
+
+  "AdditionalPropertiesProcessing": {
+    "table_name": "project_schema.СвойстваСку",
+    "conflict_target":"",
+    "parent": "Ид",
+    "parent_id": "ИдСку",
+    "parent_path": "КорневойРаздел.СписокСку.Ску",
+    "path": "ДополнительныеСвойства.Одиночные.Свойство",
+    "fields": [
+      {"source": "ИдСку", "dest": "ИдСку", "data_type": "text"},
+      {"source": "ИдТипаСвойства", "dest": "ИдТипаСвойства", "data_type": "text"},
+      {"source": "Значение", "dest": "Значение", "data_type": "text"}
+    ]
+  },
+
+  "AdditionalUnitsProcessing": {
+    "table_name": "project_schema.ДополнительныеЕдиницыИзмерения",
+    "conflict_target":"",
+    "parent": "Ид",
+    "parent_id": "ИдСку",
+    "parent_path": "КорневойРаздел.СписокСку.Ску",
+    "path": "ДополнительныеЕдИзмерения.ЕдИзмерения",
+    "fields": [
+      {"source": "ИдСку", "dest": "ИдСку", "data_type": "uuid"},
+      {"source": "Код", "dest": "Код", "data_type": "integer"},
+      {"source": "Коэффициент", "dest": "Коэффициент", "data_type": "numeric"}
+    ]
+  },
+
+  "SalesProcessing": {
+    "table_name": "raw_data_schema.sales_raw_data",
+    "conflict_target":"hash",
+    "path": "Продажи.Продажа",
+    "fields": [
+      {"source": "attributes.ДатаПродажи", "dest": "ДатаПродажи", "data_type": "text"},
+      {"source": "attributes.Номенклатура", "dest": "Номенклатура", "data_type": "text"},
+      {"source": "attributes.НоменклатураКод", "dest": "НоменклатураКод", "data_type": "text"},
+      {"source": "attributes.НоменклатураНаименование", "dest": "НоменклатураНаименование", "data_type": "text"},
+      {"source": "attributes.НоменклатураГУИД", "dest": "НоменклатураГУИД", "data_type": "text"},
+      {"source": "attributes.Количество", "dest": "Количество", "data_type": "text"},
+      {"source": "attributes.СуммаПродажи", "dest": "СуммаПродажи", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателя", "dest": "ЗаказПокупателя", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяНомер", "dest": "ЗаказПокупателяНомер", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяОрганизация", "dest": "ЗаказПокупателяОрганизация", "data_type": "text"},
+      {"source": "attributes.ОрганизацияГУИД", "dest": "ОрганизацияГУИД", "data_type": "text"},
+      {"source": "attributes.ЗаказГУИД", "dest": "ЗаказГУИД", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяКонтрагент", "dest": "ЗаказПокупателяКонтрагент", "data_type": "text"},
+      {"source": "attributes.КонтрагентГУИД", "dest": "КонтрагентГУИД", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяКонтрагентПартнер", "dest": "ЗаказПокупателяКонтрагентПартне", "data_type": "text"},
+      {"source": "attributes.ПартнерГУИД", "dest": "ПартнерГУИД", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяСклад", "dest": "ЗаказПокупателяСклад", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяСкладРезки", "dest": "ЗаказПокупателяСкладРезки", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяПодразделение", "dest": "ЗаказПокупателяПодразделение", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяСуммаДокумента", "dest": "ЗаказПокупателяСуммаДокумента", "data_type":  "text"},
+      {"source": "attributes.ЗаказПокупателяВалютаДокумента", "dest": "ЗаказПокупателяВалютаДокумента", "data_type":  "text"},
+      {"source": "attributes.ЗаказПокупателяВидОплаты", "dest": "ЗаказПокупателяВидОплаты", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяСпособОплаты" , "dest": "ЗаказПокупателяСпособОплаты", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяПоИнтернетЗаявке", "dest": "ЗаказПокупателяПоИнтернетЗаявке", "data_type":  "text"},
+      {"source": "attributes.ЗаказПокупателяКонтрагентОсновнойАдресЭлектроннойПочты", "dest": "ЗаказПокупателяКонтрагентОсновн", "data_type":   "text"},
+      {"source": "attributes.ЗаказПокупателяДоставка", "dest": "ЗаказПокупателяДоставка", "data_type":   "text"},
+      {"source": "attributes.ЗаказПокупателяРегионДоставки", "dest": "ЗаказПокупателяРегионДоставки", "data_type":   "text"},
+      {"source": "attributes.ЗаказПокупателяАдресДоставки", "dest": "ЗаказПокупателяАдресДоставки", "data_type":   "text"},
+      {"source": "attributes.ГородДоставки", "dest": "ГородДоставки", "data_type":  "text"},
+      {"source": "attributes.РайонДоставки", "dest": "РайонДоставки", "data_type":   "text"},
+      {"source": "attributes.ПоселокДоставки", "dest": "ПоселокДоставки", "data_type":   "text"},
+      {"source": "attributes.УлицаДоставки", "dest": "УлицаДоставки", "data_type":   "text"},
+      {"source": "attributes.ЗаказПокупателяГрузополучатель", "dest": "ЗаказПокупателяГрузополучатель", "data_type":  "text"},
+      {"source": "attributes.ЗаказПокупателяИсполнитель", "dest": "ЗаказПокупателяИсполнитель", "data_type": "text"}
+
+    ],
+    "computed_fields": [
+      {"source": "Количество", "dest": "Возврат", "data_type": "boolean","compute": "is_return"},
+      {"source": "ЗаказГУИД.НоменклатураГУИД.Возврат", "dest": "hash", "data_type": "text", "compute": "get_hash"}
+    ]
+  },
+
+  "PricesProcessing": {
+    "table_name": "project_schema.Цены",
+    "conflict_target":"",
+    "path": "БазоваяСтруктура.СписокЦен.Цена",
+    "fields": [
+
+      {"source": "ИдСку", "dest": "ИдСку", "data_type": "uuid"},
+      {"source": "ИдТипаЦены", "dest": "ИдТипаЦены", "data_type": "uuid"},
+      {"source": "Цена", "dest": "Цена", "data_type": "numeric"},
+      {"source": "КодВалюты", "dest": "КодВалюты", "data_type": "text"},
+      {"source": "КодЕдиницыИзмерения", "dest": "КодЕдиницыИзмерения", "data_type": "integer"}
+
+    ],
+    "computed_fields": [
+            {"source": "", "dest": "Дата", "data_type": "timestamp","compute": "date_from_name"},
+            {"source": "", "dest": "Ид", "data_type": "uuid","compute": "uuid4" }
+    ]
+  },
+
+
+  "PriceTypesProcessing": {
+    "table_name": "project_schema.ТипыЦен",
+    "conflict_target":"Ид",
+    "path": "БазоваяСтруктура.СписокТиповЦен.ТипЦены",
+    "fields": [
+      {"source": "Ид", "dest": "Ид", "data_type": "uuid"},
+      {"source": "БазовыйТип", "dest": "БазовыйТип", "data_type": "boolean"},
+      {"source": "ПометкаУдаления", "dest": "ПометкаУдаления", "data_type": "boolean"}
+
+    ],
+    "computed_fields": [
+
+    ]
+  }
+}
