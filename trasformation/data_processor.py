@@ -1,3 +1,4 @@
+import hashlib
 import uuid
 import datetime
 
@@ -40,16 +41,27 @@ class DataProcessor:
         # Ваша реализация преобразования данных
         pass
 
-    # Пример функции для вычисляемого поля
+    def is_return(self, item):
+        #Нужна только для загрузки продаж - определяет возврат это или нет
+        if item['Количество'] and preprocess_data(item['Количество'],'numeric') >= 0:
+            return False
+        else:
+            return True
+
+    def get_hash(self, item):
+        # Реализация расчета HASH функции на вход принимает и суммирует все значения в словаре item
+        hash_string = "".join(str(value) for value in item.values())
+        return hashlib.sha256(hash_string.encode('utf-8')).hexdigest()
+
     def date_from_name(self, item):
+        #Разбирам имя файла и получаем из него дату
         actual_date = datetime.datetime.fromtimestamp(int(self.file_timestamp))
-        # actual_date = datetime.datetime.fromtimestamp(int(file_timestamp))
-        # Ваша реализация вычисления даты из имени
         return actual_date
 
     def uuid4(self, item=None):
         # Возвращаем новый UUID
         return str(uuid.uuid4())
+
     def process(self, data):
         processed_data = []
         if isinstance(data, list):
@@ -76,16 +88,13 @@ class DataProcessor:
                     else:
                         values_surce={}
 
-
-
-
                     # Проверяем, существует ли метод в текущем экземпляре
                     if hasattr(self, compute_func_name):
                         compute_func = getattr(self, compute_func_name)
-                        processed_item[dest] = compute_func(values_surce)  # Передаем весь item для гибкости
+                        processed_item[dest] = compute_func(values_surce)  # Передаем весь values_surce для гибкости
                     else:
                         raise ValueError(
-                            f"Compute function {compute_func_name} is not defined in DataProcessor.")
+                            f"Compute function '{compute_func_name}' is not defined in DataProcessor.")
 
 
                 processed_data.append(processed_item)
@@ -112,9 +121,11 @@ class DataProcessor:
         return data
 
     def get_data(self, data):
+        #Определяем какие нам нужны данные для обработки обрабатываем и возвращаем Пользователю
         new_data = self._get_data_by_path(data, self.config['path'].split('.'))
         result = self.process(new_data)
         return result
+
 
 
 
