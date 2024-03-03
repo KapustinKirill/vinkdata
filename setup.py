@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='vinkdatatransform',
+    name='vinkdata',
     version='0.1.0',
     author='Капустин Кирилл',
     author_email='k.kapustin@vink.ru',
