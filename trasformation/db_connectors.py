@@ -45,7 +45,10 @@ class DatabaseManager:
         chunk_size = 1000  # Размер чанка может быть адаптирован в зависимости от вашей среды и объема данных
         for i in range(0, len(entities_data), chunk_size):
             chunk = entities_data[i:i + chunk_size]
-            values_list = [tuple(item[col] for col in columns) for item in chunk]
+            try:
+                values_list = [tuple(item[col] for col in columns) for item in chunk]
+            except KeyError as ex:
+                raise KeyError(chunk)
 
             try:
                 execute_batch(cur, insert_query, values_list)

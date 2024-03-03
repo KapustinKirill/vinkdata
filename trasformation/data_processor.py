@@ -3,6 +3,7 @@ import uuid
 import datetime
 
 def preprocess_data(value, data_type):
+    #Преобразование данных в зависимости от типа данных указанных в системе
     if value is None:
         return None
     if data_type == 'numeric':
@@ -32,14 +33,11 @@ def preprocess_data(value, data_type):
         return value
 
 class DataProcessor:
+    #Основной драйвер для обработки данных на сход ожидает настроечную таблицу
     def __init__(self,  config, filename =''):
         self.config = config
         self.filename = filename
         self.file_timestamp = filename.split('_')[0]
-
-    def preprocess_data(self, value, data_type):
-        # Ваша реализация преобразования данных
-        pass
 
     def is_return(self, item):
         #Нужна только для загрузки продаж - определяет возврат это или нет
@@ -62,55 +60,111 @@ class DataProcessor:
         # Возвращаем новый UUID
         return str(uuid.uuid4())
 
+    def _process_item(self, item):
+        processed_item = {}
+        for field in self.config['fields']:
+            value = preprocess_data(self._get_data_by_path(item, field['source'].split('.')), field['data_type'])
+            transform_func = field.get('transform', lambda x: x)
+            value = transform_func(value)
+            processed_item[field['dest']] = value
+
+        for comp_field in self.config.get('computed_fields', []):
+            dest = comp_field['dest']
+            compute_func_name = comp_field['compute']
+            values_source = {}
+            if comp_field['source']:
+                for source in comp_field['source'].split('.'):
+                    if source in processed_item:
+                        values_source[source] = processed_item[source]
+                    else:
+                        raise KeyError(f"Ошибка:  {source} Нет в {processed_item.keys()}")
+
+            if hasattr(self, compute_func_name):
+                compute_func = getattr(self, compute_func_name)
+                processed_item[dest] = compute_func(values_source)
+            else:
+                raise ValueError(f"Compute function '{compute_func_name}' is not defined in DataProcessor.")
+
+        return processed_item
+
     def process(self, data):
-        processed_data = []
         if isinstance(data, list):
-            for item in data:
-                processed_item = {}
-                for field in self.config['fields']:
-                    # Извлечение значения с учетом вложенного пути
-                    value = preprocess_data(self._get_data_by_path(item, field['source'].split('.')), field['data_type'])
-                    # Применение функции трансформации, если она указана
-                    transform_func = field.get('transform', lambda x: x)
-                    value = transform_func(value)
-                    processed_item[field['dest']] = value
-                for comp_field in self.config.get('computed_fields', []):
-                    dest = comp_field['dest']
-                    compute_func_name = comp_field['compute']
-                    if comp_field['source'] !="":
-                        values_surce = {}
-                        sources = comp_field['source'].split('.')
-                        for source in sources:
-                            if source not in processed_item:
-                                raise KeyError(source)
-                            else:
-                                values_surce[source] = processed_item[source]
-                    else:
-                        values_surce={}
-
-                    # Проверяем, существует ли метод в текущем экземпляре
-                    if hasattr(self, compute_func_name):
-                        compute_func = getattr(self, compute_func_name)
-                        processed_item[dest] = compute_func(values_surce)  # Передаем весь values_surce для гибкости
-                    else:
-                        raise ValueError(
-                            f"Compute function '{compute_func_name}' is not defined in DataProcessor.")
-
-
-                processed_data.append(processed_item)
+            return [self._process_item(item) for item in data]
         elif isinstance(data, dict):
-            item = data
-            processed_item = {}
-            for field in self.config['fields']:
-                # Извлечение значения с учетом вложенного пути
-                value = preprocess_data(self._get_data_by_path(item, field['source'].split('.')),
-                                        field['data_type'])
-                # Применение функции трансформации, если она указана
-                transform_func = field.get('transform', lambda x: x)
-                value = transform_func(value)
-                processed_item[field['dest']] = value
-            processed_data.append(processed_item)
-        return processed_data
+            return [self._process_item(data)]
+        else:
+            raise TypeError("Data should be a dictionary or a list of dictionaries.")
+    #
+    # def process(self, data):
+    #     processed_data = []
+    #     if isinstance(data, list):
+    #         for item in data:
+    #             processed_item = {}
+    #             for field in self.config['fields']:
+    #                 # Извлечение значения с учетом вложенного пути
+    #                 value = preprocess_data(self._get_data_by_path(item, field['source'].split('.')), field['data_type'])
+    #                 # Применение функции трансформации, если она указана
+    #                 transform_func = field.get('transform', lambda x: x)
+    #                 value = transform_func(value)
+    #                 processed_item[field['dest']] = value
+    #             for comp_field in self.config.get('computed_fields', []):
+    #                 dest = comp_field['dest']
+    #                 compute_func_name = comp_field['compute']
+    #                 if comp_field['source'] !="":
+    #                     values_surce = {}
+    #                     sources = comp_field['source'].split('.')
+    #                     for source in sources:
+    #                         if source not in processed_item:
+    #                             raise KeyError(source)
+    #                         else:
+    #                             values_surce[source] = processed_item[source]
+    #                 else:
+    #                     values_surce={}
+    #
+    #                 # Проверяем, существует ли метод в текущем экземпляре
+    #                 if hasattr(self, compute_func_name):
+    #                     compute_func = getattr(self, compute_func_name)
+    #                     processed_item[dest] = compute_func(values_surce)  # Передаем весь values_surce для гибкости
+    #                 else:
+    #                     raise ValueError(
+    #                         f"Compute function '{compute_func_name}' is not defined in DataProcessor.")
+    #
+    #
+    #             processed_data.append(processed_item)
+    #     elif isinstance(data, dict):
+    #         item = data
+    #         processed_item = {}
+    #         for field in self.config['fields']:
+    #             # Извлечение значения с учетом вложенного пути
+    #             value = preprocess_data(self._get_data_by_path(item, field['source'].split('.')),
+    #                                     field['data_type'])
+    #             # Применение функции трансформации, если она указана
+    #             transform_func = field.get('transform', lambda x: x)
+    #             value = transform_func(value)
+    #             processed_item[field['dest']] = value
+    #         for comp_field in self.config.get('computed_fields', []):
+    #             dest = comp_field['dest']
+    #             compute_func_name = comp_field['compute']
+    #             if comp_field['source'] != "":
+    #                 values_surce = {}
+    #                 sources = comp_field['source'].split('.')
+    #                 for source in sources:
+    #                     if source not in processed_item:
+    #                         raise KeyError(source)
+    #                     else:
+    #                         values_surce[source] = processed_item[source]
+    #             else:
+    #                 values_surce = {}
+    #
+    #             # Проверяем, существует ли метод в текущем экземпляре
+    #             if hasattr(self, compute_func_name):
+    #                 compute_func = getattr(self, compute_func_name)
+    #                 processed_item[dest] = compute_func(values_surce)  # Передаем весь values_surce для гибкости
+    #             else:
+    #                 raise ValueError(
+    #                     f"Compute function '{compute_func_name}' is not defined in DataProcessor.")
+    #         processed_data.append(processed_item)
+    #     return processed_data
     @staticmethod
     def _get_data_by_path(data, path):
         for key in path:

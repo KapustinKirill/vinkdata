@@ -124,14 +124,15 @@ class FileManager:
                 ftp.retrbinary(f'RETR {remote_file}', f.write)
 
     def read_file_as_stream(self, file_path: str) -> BytesIO:
+        filename = Path(file_path).name
         if self.ftp_details:  # Чтение файла с FTP
             with ftplib.FTP(self.ftp_details['host'], self.ftp_details['user'], self.ftp_details['pass']) as ftp:
                 stream = BytesIO()
                 ftp.retrbinary(f'RETR {file_path}', stream.write)
                 stream.seek(0)
-                return stream
+                return stream, filename
         else:  # Чтение локального файла
             with open(file_path, 'rb') as file:
-                return BytesIO(file.read())
+                return BytesIO(file.read()), filename
 
 

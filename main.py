@@ -1,7 +1,5 @@
 import json
-import os
 from datetime import datetime
-from pathlib import Path
 from config import db_details
 from trasformation.data_processor import DataProcessor, AdditionalPropertiesDataProcessor
 from trasformation.db_connectors import DatabaseManager
@@ -9,28 +7,33 @@ from trasformation.file_processor import FileManager
 from trasformation.xml_reader import XMLParser
 from config import ftp_details
 
-
-
 if __name__ == '__main__':
     # Загрузка конфигурации
     with open('config.json', 'r', encoding='utf-8') as config_file:
         config = json.load(config_file)
     file_manager = FileManager(ftp_details=ftp_details)
-    filtered_files = file_manager.list_files(ftp_details['dir']).filter(date__gt=datetime(2024, 2, 1), text__icontains = 'sale').files
-    print(filtered_files)
+    filtered_files = file_manager.list_files(ftp_details['dir']).filter(date__gt=datetime(2023, 2, 1), text__icontains = 'price').files
     # Путь к файлу может быть как на FTP, так и локально
-    file_path = filtered_files[0]
-    # Чтение файла как потока
-    file_stream = file_manager.read_file_as_stream(file_path)
-    # Создание экземпляра парсера и обработка потока
-    xml_parser = XMLParser(file_stream)
-    json_data = xml_parser.parse_from_stream(file_stream)
-    processor = DataProcessor(config['SalesProcessing'],file_path)
-    processed_sales = processor.get_data(json.loads(json_data))
-    print(json_data)
-    db_connector = DatabaseManager(config["PriceTypesProcessing"], **db_details)
-    db_connector.insert_data(processed_sales)
+    print(filtered_files)
+    for  file_path in filtered_files:
+        # Чтение файла как потока
+        file_stream, filename = file_manager.read_file_as_stream(file_path)
+        # Создание экземпляра парсера и обработка потока
+        xml_parser = XMLParser(file_stream)
+        json_data = xml_parser.parse_from_stream(file_stream)
 
+        processor = DataProcessor(config['PriceTypesProcessing'],filename)
+        processed_type = processor.get_data(json.loads(json_data))
+
+        processor_price = DataProcessor(config['PricesProcessing'],filename)
+        processed_price_data = processor_price.get_data(json.loads(json_data))
+        print(filename)
+        print(processed_price_data)
+        db_connector = DatabaseManager(config["PriceTypesProcessing"], **db_details)
+        db_connector.insert_data(processed_type)
+
+        db_connector_price = DatabaseManager(config["PricesProcessing"], **db_details)
+        db_connector_price.insert_data(processed_price_data)
 
     # #Ссылки на файл для теста
     # # xml_path = "exemple//1709127537_skus.xml"  # Указать путь к вашему XML файлу
