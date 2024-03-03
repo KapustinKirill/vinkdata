@@ -62,7 +62,7 @@ class FileQuerySet:
 
     def _text_filter(self, operation, value):
         if operation == "contains":
-            return lambda f: value.lower() in f.lower()
+            return lambda f: value in f
         elif operation == "icontains":
             return lambda f: value.lower() in f.lower()
         elif operation == "exact":
