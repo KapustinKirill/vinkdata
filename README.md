@@ -46,7 +46,7 @@ pip install git+https://github.com/KapustinKirill/vink_data_transform.git
 
 ## Настройка
 
-Перед использованием библиотеки необходимо настроить файлы `config.json` и `config.py` (не включен в репозиторий из-за `.gitignore`) для корректной работы с вашими данными и базами данных.
+Перед использованием библиотеки необходимо создать и настроить файлы `config.json` и `config.py` (не включены в репозиторий из-за `.gitignore`) для корректной работы с вашими данными и базами данных.
 
 #### Вот пример содержимого `config.json`
 ```json
@@ -110,7 +110,7 @@ db_details = {
 Пример использования модуля `xml_reader`:
 
 ```python
-from vink_data_transform.transformation.xml_reader import XMLReader
+from vinkdata.xml_reader import XMLReader
 
 xml_parser = XMLParser(file_stream)
 json_data = xml_parser.parse_from_stream(file_stream)
@@ -119,7 +119,7 @@ json_data = xml_parser.parse_from_stream(file_stream)
 Пример использования модуля `data_processor`:
 
 ```python
-from vink_data_transform.transformation.data_processor import DataProcessor
+from vinkdata.data_processor import DataProcessor
 
 processor_price = DataProcessor(config['PricesProcessing'],filename)
 processed_price_data = processor_price.get_data(json.loads(json_data))
