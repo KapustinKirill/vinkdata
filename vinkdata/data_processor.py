@@ -13,8 +13,15 @@ def preprocess_data(value, data_type):
             return None
     elif data_type == 'datetime':
         try:
-            return datetime.strptime(value, "%d.%m.%Y %H:%M:%S")
+            return datetime.datetime.strptime(value, "%d.%m.%Y %H:%M:%S")
         except ValueError:
+            raise (ValueError(f"Ошибка при расчете {value} как  {data_type}"))
+            return None
+    elif data_type == 'timestamp':
+        try:
+            return datetime.datetime.timestamp(datetime.datetime.strptime(value, "%d.%m.%Y %H:%M:%S"))
+        except ValueError:
+            raise (ValueError(f"Ошибка при расчете {value} как  {data_type}"))
             return None
     elif data_type == 'text':
         try:

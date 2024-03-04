@@ -219,7 +219,7 @@
 
     ],
     "computed_fields": [
-            {"source": "", "dest": "Дата", "data_type": "timestamp","compute": "date_from_name"},
+            {"source": "", "dest": "Дата", "data_type": "datetime","compute": "date_from_name"},
             {"source": "", "dest": "Ид", "data_type": "uuid","compute": "uuid4" }
     ]
   },
@@ -237,6 +237,53 @@
     ],
     "computed_fields": [
 
+    ]
+  },
+
+  "Sales_new_Processing": {
+    "table_name": "raw_data_schema.sales_raw_data_new",
+    "conflict_target":"hash",
+    "path": "Продажи.Продажа",
+    "fields": [
+      {"source": "attributes.ДатаПродажи", "dest": "ДатаПродажи", "data_type": "datetime"},
+      {"source": "attributes.Номенклатура", "dest": "Номенклатура", "data_type": "text"},
+      {"source": "attributes.НоменклатураКод", "dest": "НоменклатураКод", "data_type": "text"},
+      {"source": "attributes.НоменклатураНаименование", "dest": "НоменклатураНаименование", "data_type": "text"},
+      {"source": "attributes.НоменклатураГУИД", "dest": "НоменклатураГУИД", "data_type": "text"},
+      {"source": "attributes.Количество", "dest": "Количество", "data_type": "text"},
+      {"source": "attributes.СуммаПродажи", "dest": "СуммаПродажи", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателя", "dest": "ЗаказПокупателя", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяНомер", "dest": "ЗаказПокупателяНомер", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяОрганизация", "dest": "ЗаказПокупателяОрганизация", "data_type": "text"},
+      {"source": "attributes.ОрганизацияГУИД", "dest": "ОрганизацияГУИД", "data_type": "text"},
+      {"source": "attributes.ЗаказГУИД", "dest": "ЗаказГУИД", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяКонтрагент", "dest": "ЗаказПокупателяКонтрагент", "data_type": "text"},
+      {"source": "attributes.КонтрагентГУИД", "dest": "КонтрагентГУИД", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяКонтрагентПартнер", "dest": "ЗаказПокупателяКонтрагентПартне", "data_type": "text"},
+      {"source": "attributes.ПартнерГУИД", "dest": "ПартнерГУИД", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяСклад", "dest": "ЗаказПокупателяСклад", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяСкладРезки", "dest": "ЗаказПокупателяСкладРезки", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяПодразделение", "dest": "ЗаказПокупателяПодразделение", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяСуммаДокумента", "dest": "ЗаказПокупателяСуммаДокумента", "data_type":  "text"},
+      {"source": "attributes.ЗаказПокупателяВалютаДокумента", "dest": "ЗаказПокупателяВалютаДокумента", "data_type":  "text"},
+      {"source": "attributes.ЗаказПокупателяВидОплаты", "dest": "ЗаказПокупателяВидОплаты", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяСпособОплаты" , "dest": "ЗаказПокупателяСпособОплаты", "data_type": "text"},
+      {"source": "attributes.ЗаказПокупателяПоИнтернетЗаявке", "dest": "ЗаказПокупателяПоИнтернетЗаявке", "data_type":  "text"},
+      {"source": "attributes.ЗаказПокупателяКонтрагентОсновнойАдресЭлектроннойПочты", "dest": "ЗаказПокупателяКонтрагентОсновн", "data_type":   "text"},
+      {"source": "attributes.ЗаказПокупателяДоставка", "dest": "ЗаказПокупателяДоставка", "data_type":   "text"},
+      {"source": "attributes.ЗаказПокупателяРегионДоставки", "dest": "ЗаказПокупателяРегионДоставки", "data_type":   "text"},
+      {"source": "attributes.ЗаказПокупателяАдресДоставки", "dest": "ЗаказПокупателяАдресДоставки", "data_type":   "text"},
+      {"source": "attributes.ГородДоставки", "dest": "ГородДоставки", "data_type":  "text"},
+      {"source": "attributes.РайонДоставки", "dest": "РайонДоставки", "data_type":   "text"},
+      {"source": "attributes.ПоселокДоставки", "dest": "ПоселокДоставки", "data_type":   "text"},
+      {"source": "attributes.УлицаДоставки", "dest": "УлицаДоставки", "data_type":   "text"},
+      {"source": "attributes.ЗаказПокупателяГрузополучатель", "dest": "ЗаказПокупателяГрузополучатель", "data_type":  "text"},
+      {"source": "attributes.ЗаказПокупателяИсполнитель", "dest": "ЗаказПокупателяИсполнитель", "data_type": "text"}
+
+    ],
+    "computed_fields": [
+      {"source": "Количество", "dest": "возврат", "data_type": "boolean","compute": "is_return"},
+      {"source": "ЗаказГУИД.НоменклатураГУИД.возврат", "dest": "hash", "data_type": "text", "compute": "get_hash"}
     ]
   }
 }
