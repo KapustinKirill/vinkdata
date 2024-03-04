@@ -40,7 +40,7 @@ Vink Data Transformation Library — это Python-библиотека, пре�
 Для установки библиотеки используйте следующую команду:
 
 ```bash
-pip install git+https://github.com/KapustinKirill/vink_data_transform.git
+pip install git+https://github.com/KapustinKirill/vinkdata.git
 ```
 
 ## Настройка
