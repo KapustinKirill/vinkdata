@@ -6,7 +6,7 @@ setup(
     author='Капустин Кирилл',
     author_email='k.kapustin@vink.ru',
     description='Набор инструментов для трансформации данных, включая работу с базами данных, файлами и XML.',
-    long_description=open('README.md').read(),
+    long_description=open('README.md', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/kapustinkirill/vink_data_transform',
     packages=find_packages(),
