@@ -1,10 +1,10 @@
 import json
 from datetime import datetime
 from config import db_details
-from trasformation.data_processor import DataProcessor, AdditionalPropertiesDataProcessor
-from trasformation.db_connectors import DatabaseManager
-from trasformation.file_processor import FileManager
-from trasformation.xml_reader import XMLParser
+from vinkdata.data_processor import DataProcessor, AdditionalPropertiesDataProcessor
+from vinkdata.db_connectors import DatabaseManager
+from vinkdata.file_processor import FileManager
+from vinkdata.xml_reader import XMLParser
 from config import ftp_details
 
 if __name__ == '__main__':
