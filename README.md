@@ -131,3 +131,4 @@ processed_price_data = processor_price.get_data(json.loads(json_data))
 ## Лицензия
 
 Только для внутреннего пользования.
+
