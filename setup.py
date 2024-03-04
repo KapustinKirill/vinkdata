@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='vinkdata',
-    version='0.1.2',
+    version='0.1.3',
     author='Капустин Кирилл',
     author_email='k.kapustin@vink.ru',
     description='Набор инструментов для трансформации данных, включая работу с базами данных, файлами и XML.',

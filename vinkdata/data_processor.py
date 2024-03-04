@@ -6,12 +6,18 @@ def preprocess_data(value, data_type):
     #Преобразование данных в зависимости от типа данных указанных в системе
     if value is None:
         return None
+    if len(value) == 0:
+        return None
     if data_type == 'numeric':
+        if isinstance(value, float):
+            return value
         try:
             return float(value.replace("\xa0", "").replace(",", "."))
         except ValueError:
             return None
     elif data_type == 'datetime':
+        if isinstance(value, datetime):
+            return value
         try:
             return datetime.datetime.strptime(value, "%d.%m.%Y %H:%M:%S")
         except ValueError:
@@ -30,10 +36,14 @@ def preprocess_data(value, data_type):
             print(value)
         return value
     elif data_type == 'integer':
+        if isinstance(value, int):
+            return value
         try:
             return int(value.replace("\xa0", "").replace(",", "."))
         except ValueError:
             return None
+        except Exception as ex:
+            raise (Exception(f"Ошибка при обработке {value} - {ex}"))
     elif data_type == 'boolean':
         return value.lower() in ['true', '1', 't', 'y', 'yes']
     else:
@@ -100,7 +110,7 @@ class DataProcessor:
         elif isinstance(data, dict):
             return [self._process_item(data)]
         else:
-            raise TypeError("Data should be a dictionary or a list of dictionaries.")
+            raise TypeError("Data should be a dictionary or a list of dictionaries. ")
     #
     # def process(self, data):
     #     processed_data = []
@@ -184,8 +194,10 @@ class DataProcessor:
     def get_data(self, data):
         #Определяем какие нам нужны данные для обработки обрабатываем и возвращаем Пользователю
         new_data = self._get_data_by_path(data, self.config['path'].split('.'))
-        result = self.process(new_data)
-        return result
+        if new_data:
+            result = self.process(new_data)
+            return result
+        return None
 
 
 

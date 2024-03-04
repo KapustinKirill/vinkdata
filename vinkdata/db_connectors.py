@@ -56,7 +56,10 @@ class DatabaseManager:
                 print(f"Ошибка при вставке данных: {error}")
                 break  # Остановить вставку при возникновении ошибки
     def insert_data(self, entites_data):
-        with self.connect() as cur:
-            self.insert_entities_in_batches(cur, entites_data)
+        if entites_data:
+            with self.connect() as cur:
+                self.insert_entities_in_batches(cur, entites_data)
+        else:
+            raise Exception("Ошибка при записи в БД, нельзя записать пустоту")
 
 

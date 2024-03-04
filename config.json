@@ -22,7 +22,6 @@
 
     ],
     "computed_fields": [
-      {"name": "full_name", "compute": "name + ' (' + article + ')'"}
     ]
   },
 
