@@ -30,6 +30,8 @@ class DatabaseManager:
         config = self.config
         table_name = config["table_name"]
         conflict_target = config["conflict_target"]
+        if "computed_fields" not in config:
+            config["computed_fields"] = []
         fields = config["fields"] + config["computed_fields"]
 
         columns = [field["dest"] for field in fields]

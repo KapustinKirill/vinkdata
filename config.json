@@ -152,9 +152,10 @@
     "path": "ДополнительныеЕдИзмерения.ЕдИзмерения",
     "fields": [
       {"source": "ИдСку", "dest": "ИдСку", "data_type": "uuid"},
-      {"source": "Код", "dest": "Код", "data_type": "integer"},
+      {"source": "Код", "dest": "КодЕдиницыИзмерения", "data_type": "integer"},
       {"source": "Коэффициент", "dest": "Коэффициент", "data_type": "numeric"}
     ]
+
   },
 
   "SalesProcessing": {

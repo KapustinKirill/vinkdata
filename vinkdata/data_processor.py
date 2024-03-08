@@ -204,6 +204,8 @@ class DataProcessor:
 
 class AdditionalPropertiesDataProcessor(DataProcessor):
     def __init__(self, config):
+        if 'parent_path' not in config:
+            raise KeyError('Атрибутика полей не соответвует AdditionalPropertiesDataProcessor')
         super().__init__(config)
 
     def get_data(self, data):
