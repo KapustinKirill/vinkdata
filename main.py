@@ -23,11 +23,11 @@ if __name__ == '__main__':
         xml_parser = XMLParser(file_stream)
         json_data = xml_parser.parse_from_stream(file_stream)
 
-        processor = AdditionalPropertiesDataProcessor(config['AdditionalUnitsProcessing'])
+        processor = AdditionalPropertiesDataProcessor(config['AdditionalPropertiesProcessing'])
         processed_type = processor.get_data(json.loads(json_data))
         print(processed_type)
 
-        db_connector = DatabaseManager(config["AdditionalUnitsProcessing"], **db_details)
+        db_connector = DatabaseManager(config["AdditionalPropertiesProcessing"], **db_details)
         db_connector.insert_data(processed_type)
         break
 
