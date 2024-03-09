@@ -13,23 +13,94 @@ if __name__ == '__main__':
         config = json.load(config_file)
     # file_manager = FileManager(base_path="c:\\Data")
     file_manager = FileManager(ftp_details = ftp_details)
-    filtered_files = file_manager.list_files(ftp_details['dir']).filter(date__gt=datetime(2024, 3, 1), text__icontains = 'sku').files
+    filtered_files = file_manager.list_files(ftp_details['dir']).filter(date__gt=datetime(2022 , 3, 1), text__icontains = 'skus').files
     # Путь к файлу может быть как на FTP, так и локально
     print(filtered_files)
     for  file_path in filtered_files:
-        # Чтение файла как потока
+
+        # # Чтение файла как потока
         file_stream, filename = file_manager.read_file_as_stream(file_path)
         # Создание экземпляра парсера и обработка потока
         xml_parser = XMLParser(file_stream)
         json_data = xml_parser.parse_from_stream(file_stream)
+        print(filename)
+        #Записываем товары
+        processor = DataProcessor(config['SKUProductsProcessing'],filename)
+        temp = json.loads(json_data)
+        processed_type = processor.get_data(json.loads(json_data))
 
+        if processed_type and len(processed_type) > 0:
+            db_connector = DatabaseManager(config["SKUProductsProcessing"], **db_details)
+            db_connector.insert_data(processed_type)
+
+        #Записываем Свойство
+        processor = DataProcessor(config['SKUPropertiesProcessing'],filename)
+        processed_type = processor.get_data(json.loads(json_data))
+        if processed_type and len(processed_type) > 0:
+            db_connector = DatabaseManager(config["SKUPropertiesProcessing"], **db_details)
+            db_connector.insert_data(processed_type)
+
+        #Записываем ЕдИзмерения
+        processor = DataProcessor(config['SKUUnitsProcessing'],filename)
+        processed_type = processor.get_data(json.loads(json_data))
+        if processed_type and len(processed_type) > 0:
+            db_connector = DatabaseManager(config["SKUUnitsProcessing"], **db_details)
+            db_connector.insert_data(processed_type)
+
+        #Записываем СКУ
+        processor = DataProcessor(config['SKUProcessing'],filename)
+        processed_type = processor.get_data(json.loads(json_data))
+        if processed_type and len(processed_type) > 0:
+            db_connector = DatabaseManager(config["SKUProcessing"], **db_details)
+            db_connector.insert_data(processed_type)
+
+        #Записываем СвойстваСку
         processor = AdditionalPropertiesDataProcessor(config['AdditionalPropertiesProcessing'])
         processed_type = processor.get_data(json.loads(json_data))
-        print(processed_type)
+        if processed_type and len(processed_type) > 0:
+            db_connector = DatabaseManager(config["AdditionalPropertiesProcessing"], **db_details)
+            db_connector.insert_data(processed_type)
 
-        db_connector = DatabaseManager(config["AdditionalPropertiesProcessing"], **db_details)
-        db_connector.insert_data(processed_type)
-        break
+        #Записываем ДополнительныеЕдиницыИзмерения
+        processor = AdditionalPropertiesDataProcessor(config['AdditionalUnitsProcessing'])
+        processed_type = processor.get_data(json.loads(json_data))
+        if processed_type and len(processed_type) > 0:
+            db_connector = DatabaseManager(config["AdditionalUnitsProcessing"], **db_details)
+            db_connector.insert_data(processed_type)
+
+        #Записываем РазделыSKU
+        processor = AdditionalPropertiesDataProcessor(config['SKUSectionsProcessing'])
+        processed_type = processor.get_data(json.loads(json_data))
+        if processed_type and len(processed_type) > 0:
+            db_connector = DatabaseManager(config["SKUSectionsProcessing"], **db_details)
+            db_connector.insert_data(processed_type)
+
+        #Записываем РешенияSKU
+        processor = AdditionalPropertiesDataProcessor(config['SKUSolutionsProcessing'])
+        temp =json.loads(json_data)
+        processed_type = processor.get_data(json.loads(json_data))
+        if processed_type and len(processed_type) > 0:
+            db_connector = DatabaseManager(config["SKUSolutionsProcessing"], **db_details)
+            db_connector.insert_data(processed_type)
+
+        #Записываем ПохожиеСку
+        processor = AdditionalPropertiesDataProcessor(config['SKUSimilarProcessing'])
+        processed_type = processor.get_data(json.loads(json_data))
+        if processed_type and len(processed_type) > 0:
+            db_connector = DatabaseManager(config["SKUSimilarProcessing"], **db_details)
+            db_connector.insert_data(processed_type)
+
+        #Записываем ЛейблыСку
+        processor = AdditionalPropertiesDataProcessor(config['SKULabelsProcessing'])
+        processed_type = processor.get_data(json.loads(json_data))
+        if processed_type and len(processed_type) > 0:
+            db_connector = DatabaseManager(config["SKULabelsProcessing"], **db_details)
+            db_connector.insert_data(processed_type)
+
+
+
+
+
 
     # #Ссылки на файл для теста
     # # xml_path = "exemple//1709127537_skus.xml"  # Указать путь к вашему XML файлу

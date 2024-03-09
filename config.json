@@ -26,7 +26,7 @@
   },
 
   "SKUPropertiesProcessing": {
-    "table_name": "project_schema.СвойстваСку",
+    "table_name": "project_schema.Свойства",
     "conflict_target":"",
     "path": "КорневойРаздел.ТипыСвойств.Одиночные.Свойство",
     "fields": [
@@ -105,7 +105,7 @@
     "parent_path": "КорневойРаздел.СписокСку.Ску",
     "path": "ПохожиеСку",
     "fields": [
-      {"source": "ТоварИд", "dest": "ТоварИд", "data_type": "list"},
+      {"source": "ТоварИд", "dest": "ИдПохожегоСку", "data_type": "list"},
       {"source": "ИдСку", "dest": "ИдСку", "data_type": "uuid"}
 
     ],
@@ -142,6 +142,8 @@
       {"source": "Значение", "dest": "Значение", "data_type": "text"}
     ]
   },
+
+
 
   "AdditionalUnitsProcessing": {
     "table_name": "project_schema.ДополнительныеЕдиницыИзмерения",
