@@ -6,8 +6,9 @@ def preprocess_data(value, data_type):
     #Преобразование данных в зависимости от типа данных указанных в системе
     if value is None:
         return None
-    if len(value) == 0:
-        return None
+    if isinstance(value,dict|tuple|list):
+        if len(value) == 0:
+            return None
     if data_type == 'numeric':
         if isinstance(value, float):
             return value
@@ -33,7 +34,7 @@ def preprocess_data(value, data_type):
         try:
             value = value.strip()
         except:
-            print(value)
+            pass
         return value
     elif data_type == 'integer':
         if isinstance(value, int):
@@ -186,7 +187,12 @@ class DataProcessor:
     def _get_data_by_path(data, path):
         for key in path:
             if key in data:
-                data = data[key]
+                try:
+                    data = data[key]
+                except KeyError as ex:
+                    raise KeyError(f"Ошибка KeyError {ex} key = {key} data = {data}")
+                except TypeError as ex:
+                    raise TypeError(f"Ошибка TypeError {ex} key = {key} data = {data}")
             else:
                 return None
         return data
@@ -208,9 +214,40 @@ class AdditionalPropertiesDataProcessor(DataProcessor):
             raise KeyError('Атрибутика полей не соответвует AdditionalPropertiesDataProcessor')
         super().__init__(config)
 
+    def expand_list_items(self, data):
+        """
+        Разворачивает списки в значениях словарей, создавая новые словари для каждого элемента списка.
+
+        :param data: Список словарей для обработки.
+        :return: Новый список словарей с развернутыми значениями списков.
+        """
+        expanded_data = []
+        for item in data:
+            # Проверяем, есть ли в словаре значения, являющиеся списками
+            list_fields = {k: v for k, v in item.items() if isinstance(v, list)}
+            if not list_fields:
+                # Если списков нет, добавляем исходный словарь в результат
+                expanded_data.append(item)
+            else:
+                # Для каждого списка в словаре создаем новые словари
+                for field, list_values in list_fields.items():
+                    for value in list_values:
+                        # Создаем новый словарь, который копирует исходный, но с одним значением вместо списка
+                        new_item = item.copy()
+                        new_item[field] = value
+                        # Для остальных полей со списками добавляем только первое значение
+                        # Это базовый вариант, возможно, потребуется дополнительная логика
+                        for other_field in list_fields:
+                            if other_field != field:
+                                new_item[other_field] = item[other_field][0] if item[other_field] else None
+                        expanded_data.append(new_item)
+        return expanded_data
+
     def get_data(self, data):
         properties =[]
         units_data = self._get_data_by_path(data, self.config['parent_path'].split('.'))
+        if isinstance(units_data, dict):
+            units_data = [units_data,]
         for unit_data in units_data:
             properties_temp = self._get_data_by_path(unit_data, self.config['path'].split('.'))
             if isinstance(properties_temp, list):
@@ -218,8 +255,12 @@ class AdditionalPropertiesDataProcessor(DataProcessor):
                     dict_[self.config['parent_id']] = unit_data[self.config['parent']]
                 properties.extend(properties_temp)
             elif isinstance(properties_temp, dict):
-                properties_temp[self.config['parent_id']] = unit_data[self.config['parent']]
-                properties.append(properties_temp)
+                if len(properties_temp) > 0:
+                    properties_temp[self.config['parent_id']] = unit_data[self.config['parent']]
+                    properties.append(properties_temp)
         result = self.process(properties)
-        return result
+
+
+        check_result = self.expand_list_items(result)
+        return check_result
 
