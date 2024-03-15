@@ -285,5 +285,54 @@
       {"source": "Количество", "dest": "возврат", "data_type": "boolean","compute": "is_return"},
       {"source": "ЗаказГУИД.НоменклатураГУИД.возврат", "dest": "hash", "data_type": "text", "compute": "get_hash"}
     ]
-  }
+  },
+  "PricesRawTransformation": {
+    "table_name": "raw_data_schema.raw_prices_data",
+    "conflict_target": "hash",
+    "path": "ЦеныПродажи.Цена",
+    "fields": [
+        {"source": "attributes.Период", "dest": "Период", "data_type": "text"},
+        {"source": "attributes.ТипЦенНаименование", "dest": "ТипЦенНаименование", "data_type": "text"},
+        {"source": "attributes.ТипЦенКод", "dest": "ТипЦенКод", "data_type": "text"},
+        {"source": "attributes.ТипЦенГуид", "dest": "ТипЦенГуид", "data_type": "text"},
+        {"source": "attributes.НоменклатураНаименованиеПолное", "dest": "НоменклатураНаименованиеПолное", "data_type": "text"},
+        {"source": "attributes.НоменклатураКод", "dest": "НоменклатураКод", "data_type": "text"},
+        {"source": "attributes.НоменклатураГуид", "dest": "НоменклатураГуид", "data_type": "text"},
+        {"source": "attributes.Цена", "dest": "Цена", "data_type": "text"},
+        {"source": "attributes.ВалютаНаименование", "dest": "ВалютаНаименование", "data_type": "text"},
+        {"source": "attributes.ВалютаКод", "dest": "ВалютаКод", "data_type": "text"},
+        {"source": "attributes.ВалютаГуид", "dest": "ВалютаГуид", "data_type": "text"},
+        {"source": "attributes.ЕдиницаИзмеренияНаименование", "dest": "ЕдиницаИзмеренияНаименование", "data_type": "text"},
+        {"source": "attributes.ЕдиницаИзмеренияКод", "dest": "ЕдиницаИзмеренияКод", "data_type": "text"},
+        {"source": "attributes.ЕдиницаИзмеренияГуид", "dest": "ЕдиницаИзмеренияГуид", "data_type": "text"}
+    ],
+    "computed_fields": [
+        {"source": "Период.ТипЦенГуид.НоменклатураГуид.ВалютаГуид.ЕдиницаИзмеренияГуид", "dest": "hash", "data_type": "text", "compute": "get_hash"}
+    ]
+},
+    "PricesDataTransformation": {
+    "table_name": "project_schema.processed_prices_data",
+    "conflict_target": "hash",
+    "path": "ЦеныПродажи.Цена",
+    "fields": [
+        {"source": "attributes.Период", "dest": "Период", "data_type": "datetime"},
+        {"source": "attributes.ТипЦенНаименование", "dest": "ТипЦенНаименование", "data_type": "text"},
+        {"source": "attributes.ТипЦенКод", "dest": "ТипЦенКод", "data_type": "text"},
+        {"source": "attributes.ТипЦенГуид", "dest": "ТипЦенГуид", "data_type": "uuid"},
+        {"source": "attributes.НоменклатураНаименованиеПолное", "dest": "НоменклатураНаименованиеПолное", "data_type": "text"},
+        {"source": "attributes.НоменклатураКод", "dest": "НоменклатураКод", "data_type": "text"},
+        {"source": "attributes.НоменклатураГуид", "dest": "НоменклатураГуид", "data_type": "uuid"},
+        {"source": "attributes.Цена", "dest": "Цена", "data_type": "numeric"},
+        {"source": "attributes.ВалютаНаименование", "dest": "ВалютаНаименование", "data_type": "text"},
+        {"source": "attributes.ВалютаКод", "dest": "ВалютаКод", "data_type": "text"},
+        {"source": "attributes.ВалютаГуид", "dest": "ВалютаГуид", "data_type": "uuid"},
+        {"source": "attributes.ЕдиницаИзмеренияНаименование", "dest": "ЕдиницаИзмеренияНаименование", "data_type": "text"},
+        {"source": "attributes.ЕдиницаИзмеренияКод", "dest": "ЕдиницаИзмеренияКод", "data_type": "text"},
+        {"source": "attributes.ЕдиницаИзмеренияГуид", "dest": "ЕдиницаИзмеренияГуид", "data_type": "uuid"}
+    ],
+    "computed_fields": [
+        {"source": "Период.ТипЦенГуид.НоменклатураГуид.ВалютаГуид.ЕдиницаИзмеренияГуид", "dest": "hash", "data_type": "text", "compute": "get_hash"}
+    ]
+}
+
 }

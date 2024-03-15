@@ -16,7 +16,7 @@ def preprocess_data(value, data_type):
         except ValueError:
             return None
     elif data_type == 'datetime':
-        if isinstance(value, datetime):
+        if isinstance(value, datetime.datetime):
             return value
         try:
             return datetime.datetime.strptime(value, "%d.%m.%Y %H:%M:%S")
