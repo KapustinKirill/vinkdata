@@ -11,25 +11,35 @@ if __name__ == '__main__':
     # Загрузка конфигурации
     with open('config.json', 'r', encoding='utf-8') as config_file:
         config = json.load(config_file)
+
+    db_connector = DatabaseManager(config["SalesDBDTransformation"], **db_details)
+    db_connector.create_table(config["SalesDBDTransformation"])
+    result = db_connector.fetch_data()
+    print(len(result))
+    processor = DataProcessor(config['SalesDBDTransformation'])
+    processed_type = processor.get_data(json.loads(result))
+    db_connector.insert_data(processed_type)
+
+
     # file_manager = FileManager(base_path="c:\\Data")
-    file_manager = FileManager(ftp_details = ftp_details)
-    filtered_files = file_manager.list_files(ftp_details['dir']).filter(date__gt=datetime(2024, 3, 1), text__icontains = 'sku').files
-    # Путь к файлу может быть как на FTP, так и локально
-    print(filtered_files)
-    for  file_path in filtered_files:
-        # Чтение файла как потока
-        file_stream, filename = file_manager.read_file_as_stream(file_path)
-        # Создание экземпляра парсера и обработка потока
-        xml_parser = XMLParser(file_stream)
-        json_data = xml_parser.parse_from_stream(file_stream)
-
-        processor = AdditionalPropertiesDataProcessor(config['AdditionalPropertiesProcessing'])
-        processed_type = processor.get_data(json.loads(json_data))
-        print(processed_type)
-
-        db_connector = DatabaseManager(config["AdditionalPropertiesProcessing"], **db_details)
-        db_connector.insert_data(processed_type)
-        break
+    # file_manager = FileManager(ftp_details = ftp_details)
+    # filtered_files = file_manager.list_files(ftp_details['dir']).filter(date__gt=datetime(2024, 3, 1), text__icontains = 'sku').files
+    # # Путь к файлу может быть как на FTP, так и локально
+    # print(filtered_files)
+    # for  file_path in filtered_files:
+    #     # Чтение файла как потока
+    #     file_stream, filename = file_manager.read_file_as_stream(file_path)
+    #     # Создание экземпляра парсера и обработка потока
+    #     xml_parser = XMLParser(file_stream)
+    #     json_data = xml_parser.parse_from_stream(file_stream)
+    #
+    #     processor = AdditionalPropertiesDataProcessor(config['AdditionalPropertiesProcessing'])
+    #     processed_type = processor.get_data(json.loads(json_data))
+    #     print(processed_type)
+    #
+    #     db_connector = DatabaseManager(config["AdditionalPropertiesProcessing"], **db_details)
+    #     db_connector.insert_data(processed_type)
+    #     break
 
     # #Ссылки на файл для теста
     # # xml_path = "exemple//1709127537_skus.xml"  # Указать путь к вашему XML файлу

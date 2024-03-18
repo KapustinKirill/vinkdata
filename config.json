@@ -335,6 +335,83 @@
     "computed_fields": [
         {"source": "Период.ТипЦенГуид.НоменклатураГуид.ВалютаГуид.ЕдиницаИзмеренияГуид", "dest": "hash", "data_type": "text", "compute": "get_hash"}
     ]
+},
+
+      "PricesDBDTransformation": {
+    "table_name": "project_schema.processed_prices_data",
+    "source_table_name":"raw_data_schema.raw_prices_data",
+    "conflict_target": "hash",
+    "filters": [
+      ],
+    "path": "result",
+    "fields": [
+        {"source": "Период", "dest": "Период", "data_type": "datetime"},
+        {"source": "ТипЦенНаименование", "dest": "ТипЦенНаименование", "data_type": "text"},
+        {"source": "ТипЦенКод", "dest": "ТипЦенКод", "data_type": "text"},
+        {"source": "ТипЦенГуид", "dest": "ТипЦенГуид", "data_type": "uuid"},
+        {"source": "НоменклатураНаименованиеПолное", "dest": "НоменклатураНаименованиеПолное", "data_type": "text"},
+        {"source": "НоменклатураКод", "dest": "НоменклатураКод", "data_type": "text"},
+        {"source": "НоменклатураГуид", "dest": "НоменклатураГуид", "data_type": "uuid"},
+        {"source": "Цена", "dest": "Цена", "data_type": "numeric"},
+        {"source": "ВалютаНаименование", "dest": "ВалютаНаименование", "data_type": "text"},
+        {"source": "ВалютаКод", "dest": "ВалютаКод", "data_type": "text"},
+        {"source": "ВалютаГуид", "dest": "ВалютаГуид", "data_type": "uuid"},
+        {"source": "ЕдиницаИзмеренияНаименование", "dest": "ЕдиницаИзмеренияНаименование", "data_type": "text"},
+        {"source": "ЕдиницаИзмеренияКод", "dest": "ЕдиницаИзмеренияКод", "data_type": "text"},
+        {"source": "ЕдиницаИзмеренияГуид", "dest": "ЕдиницаИзмеренияГуид", "data_type": "uuid"},
+        {"source": "hash", "dest": "hash", "data_type": "uuid"}
+    ],
+    "computed_fields": []
+},
+
+    "SalesDBDTransformation": {
+    "table_name": "project_schema.processed_sales_data",
+    "source_table_name":"raw_data_schema.sales_raw_data",
+    "conflict_target": "hash",
+    "filters": [
+      ],
+    "path": "result",
+    "fields": [
+{"source": "ДатаПродажи", "dest": "ДатаПродажи", "data_type": "datetime"},
+      {"source": "Номенклатура", "dest": "Номенклатура", "data_type": "text"},
+      {"source": "НоменклатураКод", "dest": "НоменклатураКод", "data_type": "text"},
+      {"source": "НоменклатураНаименование", "dest": "НоменклатураНаименование", "data_type": "text"},
+      {"source": "НоменклатураГУИД", "dest": "НоменклатураГУИД", "data_type": "text"},
+      {"source": "Количество", "dest": "Количество", "data_type": "text"},
+      {"source": "СуммаПродажи", "dest": "СуммаПродажи", "data_type": "text"},
+      {"source": "ЗаказПокупателя", "dest": "ЗаказПокупателя", "data_type": "text"},
+      {"source": "ЗаказПокупателяНомер", "dest": "ЗаказПокупателяНомер", "data_type": "text"},
+      {"source": "ЗаказПокупателяОрганизация", "dest": "ЗаказПокупателяОрганизация", "data_type": "text"},
+      {"source": "ОрганизацияГУИД", "dest": "ОрганизацияГУИД", "data_type": "text"},
+      {"source": "ЗаказГУИД", "dest": "ЗаказГУИД", "data_type": "text"},
+      {"source": "ЗаказПокупателяКонтрагент", "dest": "ЗаказПокупателяКонтрагент", "data_type": "text"},
+      {"source": "КонтрагентГУИД", "dest": "КонтрагентГУИД", "data_type": "text"},
+      {"source": "ЗаказПокупателяКонтрагентПартне", "dest": "ЗаказПокупателяКонтрагентПартне", "data_type": "text"},
+      {"source": "ПартнерГУИД", "dest": "ПартнерГУИД", "data_type": "text"},
+      {"source": "ЗаказПокупателяСклад", "dest": "ЗаказПокупателяСклад", "data_type": "text"},
+      {"source": "ЗаказПокупателяСкладРезки", "dest": "ЗаказПокупателяСкладРезки", "data_type": "text"},
+      {"source": "ЗаказПокупателяПодразделение", "dest": "ЗаказПокупателяПодразделение", "data_type": "text"},
+      {"source": "ЗаказПокупателяСуммаДокумента", "dest": "ЗаказПокупателяСуммаДокумента", "data_type":  "text"},
+      {"source": "ЗаказПокупателяВалютаДокумента", "dest": "ЗаказПокупателяВалютаДокумента", "data_type":  "text"},
+      {"source": "ЗаказПокупателяВидОплаты", "dest": "ЗаказПокупателяВидОплаты", "data_type": "text"},
+      {"source": "ЗаказПокупателяСпособОплаты" , "dest": "ЗаказПокупателяСпособОплаты", "data_type": "text"},
+      {"source": "ЗаказПокупателяПоИнтернетЗаявке", "dest": "ЗаказПокупателяПоИнтернетЗаявке", "data_type":  "text"},
+      {"source": "ЗаказПокупателяКонтрагентОсновн", "dest": "ЗаказПокупателяКонтрагентОсновн", "data_type":   "text"},
+      {"source": "ЗаказПокупателяДоставка", "dest": "ЗаказПокупателяДоставка", "data_type":   "text"},
+      {"source": "ЗаказПокупателяРегионДоставки", "dest": "ЗаказПокупателяРегионДоставки", "data_type":   "text"},
+      {"source": "ЗаказПокупателяАдресДоставки", "dest": "ЗаказПокупателяАдресДоставки", "data_type":   "text"},
+      {"source": "ГородДоставки", "dest": "ГородДоставки", "data_type":  "text"},
+      {"source": "РайонДоставки", "dest": "РайонДоставки", "data_type":   "text"},
+      {"source": "ПоселокДоставки", "dest": "ПоселокДоставки", "data_type":   "text"},
+      {"source": "УлицаДоставки", "dest": "УлицаДоставки", "data_type":   "text"},
+      {"source": "ЗаказПокупателяГрузополучатель", "dest": "ЗаказПокупателяГрузополучатель", "data_type":  "text"},
+      {"source": "ЗаказПокупателяИсполнитель", "dest": "ЗаказПокупателяИсполнитель", "data_type": "text"},
+      {"source": "Возврат", "dest": "возврат", "data_type": "text"},
+      {"source": "hash", "dest": "hash", "data_type": "text"}
+
+    ],
+    "computed_fields": []
 }
+
 
 }
