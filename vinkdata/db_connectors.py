@@ -5,12 +5,13 @@ from psycopg2.extras import execute_batch, DictCursor
 
 
 class DatabaseManager:
-    def __init__(self, config, dbname, user, password, host='localhost'):
+    def __init__(self, config, dbname, user, password, host='localhost',chunk = 1000):
         self.database_name = dbname
         self.user_name = user
         self.password = password
         self.host = host
         self.config = config
+        self.chunk = chunk
 
     @contextmanager
     def connect(self):
@@ -45,7 +46,7 @@ class DatabaseManager:
 
         insert_query = f"INSERT INTO {table_name} ({columns_list}) VALUES ({placeholders}) {conflict_action};"
 
-        chunk_size = 1000  # Размер чанка может быть адаптирован в зависимости от вашей среды и объема данных
+        chunk_size = self.chunk # Размер чанка может быть адаптирован в зависимости от вашей среды и объема данных
         for i in range(0, len(entities_data), chunk_size):
             chunk = entities_data[i:i + chunk_size]
             try:
@@ -93,7 +94,11 @@ class DatabaseManager:
             "text": "TEXT",
             "numeric": "NUMERIC",
             "datetime": "TIMESTAMP",
-            "uuid": "UUID"
+            "uuid": "UUID",
+            "date": "DATETIME",
+            "time": "TIMESTAMP",
+            "date_time": "DATETIME",
+            "boolean": "BOOLEAN"
         }
 
         for field in fields_config:

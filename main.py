@@ -12,7 +12,7 @@ if __name__ == '__main__':
     with open('config.json', 'r', encoding='utf-8') as config_file:
         config = json.load(config_file)
 
-    db_connector = DatabaseManager(config["SalesDBDTransformation"], **db_details)
+    db_connector = DatabaseManager(config["SalesDBDTransformation"], **db_details,chunk = 10000)
     db_connector.create_table(config["SalesDBDTransformation"])
     result = db_connector.fetch_data()
     print(len(result))

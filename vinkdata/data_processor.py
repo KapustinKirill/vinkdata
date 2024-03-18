@@ -46,7 +46,9 @@ def preprocess_data(value, data_type):
         except Exception as ex:
             raise (Exception(f"Ошибка при обработке {value} - {ex}"))
     elif data_type == 'boolean':
-        return value.lower() in ['true', '1', 't', 'y', 'yes']
+        if isinstance(value, bool):
+            return value
+        return value.lower() in ['true', '1', 't', 'y', 'yes','да']
     else:
         return value
 
