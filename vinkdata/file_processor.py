@@ -1,10 +1,9 @@
 import re
 from datetime import datetime
-import os
+# import os
 import shutil
 from io import BytesIO
-
-from config import ftp_details
+# from config import ftp_details
 from pathlib import Path, PurePath
 import ftplib
 
