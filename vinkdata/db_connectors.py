@@ -71,7 +71,7 @@ class DatabaseManager:
     def fetch_data(self):
         query_config = self.config
         table_name = query_config["source_table_name"]
-        fields = ", ".join([f'"{item["source"]}" AS "{item["dest"]}"' for item in query_config["fields"]])
+        fields = ", ".join([f'"{item["source"]}" AS "{item["source"]}"' for item in query_config["fields"]])
         query = f"SELECT {fields} FROM {table_name};"
 
         with self.connect() as cur:
