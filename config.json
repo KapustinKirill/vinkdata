@@ -417,8 +417,8 @@
     "source_table_name":"main.sales_row",
     "conflict_target": "hash",
     "filters": [
-
-      ],
+        {"field": "update_at", "operator": ">", "value": "2024-04-03 11:00"}
+    ],
     "path": "result",
     "fields": [
       {"source": "ДатаПродажи", "dest": "date", "data_type": "datetime1"},
