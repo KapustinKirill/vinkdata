@@ -12,13 +12,13 @@ if __name__ == '__main__':
     with open('config.json', 'r', encoding='utf-8') as config_file:
         config = json.load(config_file)
 
-    db_connector = DatabaseManager(config["SalesDBDTransformation"], **db_details,chunk = 10000)
-    db_connector.create_table(config["SalesDBDTransformation"])
+    db_connector = DatabaseManager(config["SalesDBD"], **db_details,chunk = 10000)
+    # db_connector.create_table(config["SalesDBDTransformation"])
     result = db_connector.fetch_data()
-    print(len(result))
-    processor = DataProcessor(config['SalesDBDTransformation'])
+    print(result)
+    processor = DataProcessor(config['SalesDBD'])
     processed_type = processor.get_data(json.loads(result))
-    db_connector.insert_data(processed_type)
+    # db_connector.insert_data(processed_type)
 
 
     # file_manager = FileManager(base_path="c:\\Data")

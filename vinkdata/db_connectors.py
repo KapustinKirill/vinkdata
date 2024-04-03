@@ -68,20 +68,43 @@ class DatabaseManager:
         else:
             raise Exception("Ошибка при записи в БД, нельзя записать пустоту")
 
+    # def fetch_data(self):
+    #     query_config = self.config
+    #     table_name = query_config["source_table_name"]
+    #     fields = ", ".join([f'"{item["source"]}" AS "{item["source"]}"' for item in query_config["fields"]])
+    #     query = f"SELECT {fields} FROM {table_name};"
+    #
+    #     with self.connect() as cur:
+    #         cur.execute(query)
+    #         # Получаем результаты как список словарей
+    #         records = cur.fetchall()
+    #         # Преобразуем каждую запись в словарь
+    #         result = {'result':[dict(record) for record in records]}
+    #         # Сериализуем результат в JSON
+    #         result_json = json.dumps(result, default=str, ensure_ascii=False)  # default=str для обработки datetime и других типов
+    #         return result_json
     def fetch_data(self):
         query_config = self.config
         table_name = query_config["source_table_name"]
-        fields = ", ".join([f'"{item["source"]}" AS "{item["source"]}"' for item in query_config["fields"]])
-        query = f"SELECT {fields} FROM {table_name};"
+        fields = ", ".join([f'"{item["source"]}" AS "{item["dest"]}"' for item in query_config["fields"]])
+
+        filters = query_config.get("filters", [])
+        where_clauses = []
+        params = []
+        for f in filters:
+            where_clauses.append(f'"{f["field"]}" {f["operator"]} %s')
+            params.append(f["value"])
+        where_clause = " AND ".join(where_clauses)
+
+        query = f"SELECT {fields} FROM {table_name}"
+        if where_clauses:
+            query += f" WHERE {where_clause};"
 
         with self.connect() as cur:
-            cur.execute(query)
-            # Получаем результаты как список словарей
+            cur.execute(query, params)
             records = cur.fetchall()
-            # Преобразуем каждую запись в словарь
-            result = {'result':[dict(record) for record in records]}
-            # Сериализуем результат в JSON
-            result_json = json.dumps(result, default=str, ensure_ascii=False)  # default=str для обработки datetime и других типов
+            result = [dict(zip([col[0] for col in cur.description], rec)) for rec in records]
+            result_json = json.dumps({"result": result}, default=str, ensure_ascii=False)
             return result_json
 
     def create_table(self, config):

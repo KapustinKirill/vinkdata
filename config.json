@@ -411,7 +411,32 @@
 
     ],
     "computed_fields": []
-}
+},
+    "SalesDBD": {
+    "table_name": "main.sales_row",
+    "source_table_name":"main.sales_row",
+    "conflict_target": "hash",
+    "filters": [
+
+      ],
+    "path": "result",
+    "fields": [
+      {"source": "ДатаПродажи", "dest": "date", "data_type": "datetime1"},
+      {"source": "НоменклатураГУИД", "dest": "sku_id", "data_type": "uuid"},
+      {"source": "Количество", "dest": "count", "data_type": "numeric"},
+      {"source": "СуммаПродажи", "dest": "sum_sale", "data_type": "numeric"},
+      {"source": "ЗаказГУИД", "dest": "customer_order_id", "data_type": "uuid"},
+      {"source": "КонтрагентГУИД", "dest": "counteragent_id", "data_type": "uuid"},
+      {"source": "ГородДоставки", "dest": "delivery_city", "data_type":  "text"},
+      {"source": "РайонДоставки", "dest": "delivery_area", "data_type":   "text"},
+      {"source": "ПоселокДоставки", "dest": "delivery_village", "data_type":   "text"},
+      {"source": "УлицаДоставки", "dest": "delivery_street", "data_type":   "text"},
+      {"source": "возврат", "dest": "refund", "data_type": "boolean"},
+      {"source": "hash", "dest": "hash", "data_type": "text"}
+
+    ],
+    "computed_fields": []
+  }
 
 
 }
