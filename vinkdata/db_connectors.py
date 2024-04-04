@@ -57,8 +57,12 @@ class DatabaseManager:
             try:
                 execute_batch(cur, insert_query, values_list)
             except psycopg2.DatabaseError as error:
+                cur.connection.rollback()
+                # Логируем ошибку для детального анализа
                 print(f"Ошибка при вставке данных: {error}")
-                break  # Остановить вставку при возникновении ошибки
+                # Вместо break выбрасываем исключение
+                raise psycopg2.DatabaseError(f"Ошибка при вставке данных: {error}")
+
 
 
     def insert_data(self, entites_data):
