@@ -71,6 +71,11 @@ class DataProcessor:
         hash_string = "".join(str(value) for value in item.values())
         return hashlib.sha256(hash_string.encode('utf-8')).hexdigest()
 
+    def get_key(self, item):
+        # Реализация расчета HASH функции на вход принимает и суммирует все значения в словаре item
+        string_new = "_".join(str(value) for value in item.values())
+        return string_new
+
     def date_from_name(self, item):
         #Разбирам имя файла и получаем из него дату
         actual_date = datetime.datetime.fromtimestamp(int(self.file_timestamp))
