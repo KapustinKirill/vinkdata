@@ -259,11 +259,11 @@ class AdditionalPropertiesDataProcessor(DataProcessor):
             properties_temp = self._get_data_by_path(unit_data, self.config['path'].split('.'))
             if isinstance(properties_temp, list):
                 for dict_ in properties_temp:
-                    dict_[self.config['parent_id']] = unit_data[self.config['parent']]
+                    dict_[self.config['parent_id']] =  self._get_data_by_path(unit_data, self.config['parent'].split('.'))
                 properties.extend(properties_temp)
             elif isinstance(properties_temp, dict):
                 if len(properties_temp) > 0:
-                    properties_temp[self.config['parent_id']] = unit_data[self.config['parent']]
+                    properties_temp[self.config['parent_id']] = self._get_data_by_path(unit_data, self.config['parent'].split('.'))
                     properties.append(properties_temp)
         result = self.process(properties)
 
