@@ -34,7 +34,7 @@ class FileQuerySet:
     def _date_filter(self, operation, value):
         def parse_date_from_filename(filename):
             filename = Path(filename).name
-            match = re.match(r"(\d+)", filename)
+            match = re.match(r"(\d{10})", filename)
             if match:
                 date_str = match.group(1)
                 try:
