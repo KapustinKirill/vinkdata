@@ -1,3 +1,4 @@
+#db_connectors.py
 import json
 from contextlib import contextmanager
 import psycopg2
@@ -125,7 +126,8 @@ class DatabaseManager:
             "date": "DATETIME",
             "time": "TIMESTAMP",
             "date_time": "DATETIME",
-            "boolean": "BOOLEAN"
+            "boolean": "BOOLEAN",
+            "json": "JSONB"
         }
 
         for field in fields_config:

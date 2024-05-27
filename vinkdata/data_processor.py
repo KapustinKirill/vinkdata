@@ -1,4 +1,6 @@
+#data_processor.py
 import hashlib
+import json
 import uuid
 import datetime
 
@@ -49,6 +51,18 @@ def preprocess_data(value, data_type):
         if isinstance(value, bool):
             return value
         return value.lower() in ['true', '1', 't', 'y', 'yes','да']
+
+    elif data_type == 'json':
+        if isinstance(value, str):
+            try:
+                return json.loads(value)
+            except json.JSONDecodeError as ex:
+                raise (Exception(f"Ошибка при создании json {value} - {ex}"))
+
+        elif isinstance(value, (dict, list)):
+            return value
+        else:
+            return None
     else:
         return value
 

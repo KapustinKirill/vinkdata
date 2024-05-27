@@ -54,12 +54,12 @@
   },
 
     "SKUProductsProcessing": {
-    "table_name": "project_schema.Товары",
+    "table_name": "project_schema.Товары1",
     "conflict_target":"Ид",
     "path": "КорневойРаздел.СписокТоваров.Товар",
     "fields": [
       {"source": "Ид", "dest": "Ид", "data_type": "text"},
-      {"source": "Наименование", "dest": "Наименование", "data_type": "text"}
+      {"source": "Наименование", "dest": "Наименование", "data_type": "json"}
 
     ],
     "computed_fields": []
@@ -143,7 +143,18 @@
     ]
   },
 
-
+  "PropertiesProcessingJson": {
+    "table_name": "project_schema.СвойстваСкуJson",
+    "conflict_target":"",
+    "parent": "Ид",
+    "parent_id": "ИдСку",
+    "parent_path": "КорневойРаздел.СписокСку.Ску",
+    "path": "ДополнительныеСвойства.Одиночные.Свойство",
+    "fields": [
+      {"source": "ИдСку", "dest": "ИдСку", "data_type": "text"},
+      {"source": "Значение", "dest": "Значение", "data_type": "json"}
+    ]
+  },
 
   "AdditionalUnitsProcessing": {
     "table_name": "project_schema.ДополнительныеЕдиницыИзмерения",
