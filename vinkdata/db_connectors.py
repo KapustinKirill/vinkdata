@@ -51,7 +51,10 @@ class DatabaseManager:
         for i in range(0, len(entities_data), chunk_size):
             chunk = entities_data[i:i + chunk_size]
             try:
-                values_list = [tuple(item[col] for col in columns) for item in chunk]
+                # values_list = [tuple(item[col] for col in columns) for item in chunk]
+                values_list = [tuple(
+                    json.dumps(item[col]) if isinstance(item[col], (dict, list)) else item[col] for col in columns) for
+                               item in chunk]
             except KeyError as ex:
                 raise KeyError(chunk)
 
