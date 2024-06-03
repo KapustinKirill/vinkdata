@@ -62,22 +62,26 @@ def preprocess_data(value, data_type):
         return value
 
 class DataProcessor:
+    # Основной драйвер для обработки данных на вход ожидает настроечную таблицу
     def __init__(self, config, filename=''):
         self.config = config
         self.filename = filename
         self.file_timestamp = filename.split('_')[0] if filename else None
 
     def is_return(self, item):
+        # Нужна только для загрузки продаж - определяет возврат это или нет
         if item['Количество'] and preprocess_data(item['Количество'], 'numeric') >= 0:
             return False
         else:
             return True
 
     def get_hash(self, item):
+        # Реализация расчета HASH функции на вход принимает и суммирует все значения в словаре item
         hash_string = "".join(str(value) for value in item.values())
         return hashlib.sha256(hash_string.encode('utf-8')).hexdigest()
 
     def get_key(self, item):
+        # Реализация расчета Key функции на вход принимает и суммирует все значения в словаре item
         string_new = "_".join(str(value) for value in item.values())
         return string_new
 
@@ -125,6 +129,8 @@ class DataProcessor:
 
     @staticmethod
     def _get_data_by_path(data, path):
+        if not path[0]:  # If path is empty or only contains an empty string
+            return data
         for key in path:
             if key in data:
                 try:
