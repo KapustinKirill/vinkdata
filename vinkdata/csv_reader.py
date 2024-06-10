@@ -28,7 +28,7 @@ class CSVParser:
                     data.append(row)
         elif self.stream:
             self.stream.seek(0)
-            text_stream = io.TextIOWrapper(self.stream, encoding=self.encoding)
+            text_stream = io.TextIOWrapper(self.stream, encoding=self.encoding) #Читаем поток
             reader = csv.DictReader(text_stream, delimiter=self.delimiter)
             reader.fieldnames = [self.clean_column_name(name) for name in
                         reader.fieldnames]  # Очистка названий колонок
