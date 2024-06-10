@@ -28,8 +28,10 @@ class CSVParser:
                     data.append(row)
         elif self.stream:
             self.stream.seek(0)
-            reader = csv.DictReader(self.stream, delimiter=self.delimiter)
-            reader.fieldnames = [self.clean_column_name(name) for name in reader.fieldnames]  # Очистка названий колонок
+            text_stream = io.TextIOWrapper(self.stream, encoding=self.encoding)
+            reader = csv.DictReader(text_stream, delimiter=self.delimiter)
+            reader.fieldnames = [self.clean_column_name(name) for name in
+                        reader.fieldnames]  # Очистка названий колонок
             for row in reader:
                 data.append(row)
         else:
