@@ -3,7 +3,7 @@ import json
 from contextlib import contextmanager
 import psycopg2
 from psycopg2.extras import execute_batch, DictCursor
-
+import copy
 
 class DatabaseManager:
     def __init__(self, config, dbname, user, password, host='localhost',chunk = 1000):
@@ -117,7 +117,8 @@ class DatabaseManager:
 
     def create_table(self, config):
         table_name = config["table_name"]
-        fields_config = config["fields"]
+        fields_config = copy.deepcopy(config["fields"])
+        fields_config += config["computed_fields"]
         fields_definitions = []
 
         # Сопоставление пользовательских типов данных с типами данных PostgreSQL
