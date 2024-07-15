@@ -23,6 +23,7 @@ class DatabaseManager:
         except psycopg2.DatabaseError as error:
             conn.rollback()
             print(f"Ошибка базы данных: {error}")
+            raise psycopg2.DatabaseError( f"Ошибка базы данных: {error}" )
         else:
             conn.commit()
         finally:
