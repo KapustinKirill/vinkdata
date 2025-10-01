@@ -14,7 +14,8 @@ setup(
         # Зависимости проекта, например:
         'psycopg2-binary',
         'lxml',
-        'openpyxl'
+        'openpyxl',
+        'requests'
         # Другие зависимости
     ],
     classifiers=[
